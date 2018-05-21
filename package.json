@@ -1,6 +1,6 @@
 {
-  "name": "parcel-plugin-visualiser",
-  "version": "1.0.0",
+  "name": "parcel-plugin-assetTree",
+  "version": "0.0.1",
   "main": "./src/index.js",
   "license": "MIT",
   "scripts": {
