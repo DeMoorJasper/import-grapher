@@ -1,0 +1,12 @@
+{
+  "name": "parcel-plugin-visualiser",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node ./test/test.js"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.8.1"
+  }
+}
