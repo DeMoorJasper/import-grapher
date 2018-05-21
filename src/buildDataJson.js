@@ -52,21 +52,9 @@ function buildTree(bundle) {
   }
 
   let bundleData = {
-    type: bundle.type,
-    name: bundle.name,
-    childBundles: [],
-    assetTree: {
-      entry: entryAsset.name,
-      type: entryAsset.type,
-      dependencies: buildAssetTree(bundle, entryAsset)
-    }
-  }
-
-  for (let childBundle of bundle.childBundles) {
-    let bundleTree = buildTree(childBundle);
-    if (bundleTree) {
-      bundleData.childBundles.push(bundleTree);
-    }
+    name: entryAsset.name,
+    type: entryAsset.type,
+    dependencies: buildAssetTree(bundle, entryAsset)
   }
 
   return bundleData;
