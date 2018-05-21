@@ -2,6 +2,12 @@
 
 Uses Parcel in the background to generate an asset graph
 
+## Install
+
+```
+npm install import-grapher
+```
+
 ## CLI
 
 Generates a `import-graph.json` file in the current working directory.
