@@ -1,9 +1,22 @@
+const Bundler = require('parcel-bundler');
 const buildDataJson = require('./buildDataJson');
 const path = require('path');
-const fs = require('fs');
 
-module.exports = (bundler) => {
-  bundler.on('bundled', bundle => {
-    fs.writeFileSync(path.join(bundler.options.outDir, 'parcel-assetTree.json'), JSON.stringify(buildDataJson(bundle)));
+async function generateGraph(entryPoint, options = {}) {
+  console.log(options);
+  let cwd = process.cwd();
+  let bundler = new Bundler(entryPoint, {
+    outDir: path.join(cwd, '.import-grapher', 'dist'),
+    cacheDir: path.join(cwd, '.import-grapher', '.cache'),
+    publicUrl: './',
+    watch: false,
+    cache: options.cache === false ? false : true,
+    target: 'node'
   });
-};
+  
+  let bundle = await bundler.bundle();
+
+  return await buildDataJson(bundle);
+}
+
+module.exports = generateGraph;

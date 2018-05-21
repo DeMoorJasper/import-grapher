@@ -1,12 +1,17 @@
 {
-  "name": "parcel-plugin-asset-tree",
-  "version": "0.0.1",
+  "name": "import-grapher",
+  "version": "0.0.2",
   "main": "./src/index.js",
+  "bin": {
+    "importgrapher": "./src/cli.js"
+  },
   "license": "MIT",
   "scripts": {
+    "test-cli": "importgrapher ./src/index.js",
     "test": "node ./test/test.js"
   },
-  "devDependencies": {
+  "dependencies": {
+    "commander": "^2.15.1",
     "parcel-bundler": "^1.8.1"
   }
 }

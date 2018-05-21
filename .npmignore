@@ -2,3 +2,5 @@ test
 dist
 .cache
 node_modules
+parcel-assetTree.json
+.import-grapher

@@ -1,19 +1,11 @@
-const Bundler = require('parcel-bundler');
-const parcelVisualiser = require('../src/index');
+const importGrapher = require('../src/index');
 const path = require('path');
+const fs = require('fs');
 
 async function test() {
-  let bundler = new Bundler(path.join(__dirname, './project/index.js'), {
-    outDir: path.join(__dirname, 'dist'),
-    publicUrl: './',
-    watch: false,
-    cache: false,
-    target: 'browser'
-  });
+  let jsonData = await parcelVisualiser(path.join(__dirname, './project/index.js'));
 
-  parcelVisualiser(bundler);
-
-  await bundler.bundle();
+  fs.writeFileSync(path.join(__dirname, 'parcel-assetTree.json'), JSON.stringify(jsonData));
 }
 
 test();
