@@ -2,6 +2,7 @@
   "name": "import-grapher",
   "version": "0.0.3",
   "main": "./src/index.js",
+  "license": "MIT",
   "bin": {
     "importgrapher": "./src/cli.js"
   },
@@ -12,7 +13,6 @@
   "bugs": {
     "url": "https://github.com/DeMoorJasper/import-grapher/issues"
   },
-  "license": "MIT",
   "scripts": {
     "test-cli": "importgrapher ./src/index.js",
     "test": "node ./test/test.js"

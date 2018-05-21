@@ -11,10 +11,6 @@ function findAsset(bundle, name, includedInParent, previous) {
       }
     }
   }
-  return {
-    name: name,
-    includedInParent: includedInParent
-  }
 }
 
 function normalizeName(assetName, dep) {
@@ -30,18 +26,12 @@ function buildAssetTree(bundle, asset, previous = []) {
   for (let [dep, depProps] of asset.dependencies) {
     let depName = normalizeName(asset.name, depProps.name);
     if (previous.indexOf(depName) === -1) {
-      previous.push(depName);
-      if (depProps.includedInParent) {
-        if (bundle.parentBundle) {
-          tree.push(findAsset(bundle.parentBundle, depName, true, previous));
-        } else {
-          tree.push({
-            name: depName,
-            includedInParent: true
-          });
+      if (!depProps.includedInParent) {
+        previous.push(depName);
+        let assetTree = findAsset(bundle, depName, false, previous);
+        if (assetTree) {
+          tree.push(assetTree);
         }
-      } else {
-        tree.push(findAsset(bundle, depName, false, previous));
       }
     } else {
       tree.push({
