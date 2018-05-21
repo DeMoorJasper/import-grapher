@@ -3,15 +3,15 @@ const buildDataJson = require('./buildDataJson');
 const path = require('path');
 
 async function generateGraph(entryPoint, options = {}) {
-  console.log(options);
   let cwd = process.cwd();
   let bundler = new Bundler(entryPoint, {
     outDir: path.join(cwd, '.import-grapher', 'dist'),
     cacheDir: path.join(cwd, '.import-grapher', '.cache'),
     publicUrl: './',
     watch: false,
-    cache: options.cache === false ? false : true,
-    target: 'node'
+    cache: options.cache || true,
+    target: 'node',
+    logLevel: 0
   });
   
   let bundle = await bundler.bundle();
