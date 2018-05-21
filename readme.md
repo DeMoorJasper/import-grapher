@@ -38,3 +38,7 @@ async function getGraph() {
 
 getGraph();
 ```
+
+## License
+
+MIT
