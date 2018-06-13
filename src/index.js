@@ -29,7 +29,7 @@ async function generateGraph(entryPoint, options = {}) {
     throw new Error('An error occured while processing code...');
   }
 
-  return await buildDataJson(bundle);
+  return await buildDataJson(bundle, options.postProcessor);
 }
 
 module.exports = generateGraph;
