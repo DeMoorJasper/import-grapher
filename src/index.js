@@ -1,7 +1,6 @@
 const Bundler = require('parcel-bundler');
 const buildDataJson = require('./buildDataJson');
 const path = require('path');
-const chalk = require('chalk');
 
 async function generateGraph(entryPoint, options = {}) {
   let cwd = process.cwd();
@@ -29,7 +28,7 @@ async function generateGraph(entryPoint, options = {}) {
     throw new Error('An error occured while processing code...');
   }
 
-  return await buildDataJson(bundle);
+  return await buildDataJson(bundle, options.processNode);
 }
 
 module.exports = generateGraph;
