@@ -1,14 +1,17 @@
 const path = require('path');
 
-function findAsset(bundle, name, includedInParent, previous) {
+async function findAsset(bundle, name, previous, processNode) {
   for (let asset of bundle.assets) {
     let withExt = name + path.extname(asset.name);
     if (asset.name === name || asset.name === withExt) {
-      return {
+      let dependencies = await buildAssetTree(bundle, asset, processNode, previous);
+      return processNode
+      ? processNode(asset, dependencies)
+      : {
         name: asset.relativeName,
         type: asset.type,
-        dependencies: buildAssetTree(bundle, asset, previous)
-      }
+        dependencies
+      };
     }
   }
 }
@@ -20,7 +23,7 @@ function normalizeName(assetName, dep) {
   return dep;
 }
 
-function buildAssetTree(bundle, asset, previous = []) {
+async function buildAssetTree(bundle, asset, processNode, previous = []) {
   let tree = [];
 
   for (let [dep, depProps] of asset.dependencies) {
@@ -28,7 +31,7 @@ function buildAssetTree(bundle, asset, previous = []) {
     if (previous.indexOf(depName) === -1) {
       if (!depProps.includedInParent) {
         previous.push(depName);
-        let assetTree = findAsset(bundle, depName, false, previous);
+        let assetTree = await findAsset(bundle, depName, previous, processNode);
         if (assetTree) {
           tree.push(assetTree);
         }
@@ -44,7 +47,7 @@ function buildAssetTree(bundle, asset, previous = []) {
   return tree;
 }
 
-function buildTree(bundle) {
+async function buildTree(bundle, processNode) {
   let entryAsset = bundle.entryAsset;
 
   if (!entryAsset) {
@@ -54,7 +57,7 @@ function buildTree(bundle) {
   let bundleData = {
     name: entryAsset.name,
     type: entryAsset.type,
-    dependencies: buildAssetTree(bundle, entryAsset)
+    dependencies: await buildAssetTree(bundle, entryAsset, processNode)
   }
 
   return bundleData;
