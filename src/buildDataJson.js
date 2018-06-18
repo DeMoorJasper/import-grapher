@@ -1,18 +1,17 @@
 const path = require('path');
 
-async function findAsset(bundle, name, previous, postProcessor) {
+async function findAsset(bundle, name, previous, processNode) {
   for (let asset of bundle.assets) {
     let withExt = name + path.extname(asset.name);
     if (asset.name === name || asset.name === withExt) {
-      let postProcessed = {};
-      if (postProcessor) {
-        postProcessed = await postProcessor(asset);
-      }
-      return Object.assign({
+      let dependencies = await buildAssetTree(bundle, asset, processNode, previous);
+      return processNode
+      ? processNode(asset, dependencies)
+      : {
         name: asset.relativeName,
         type: asset.type,
-        dependencies: await buildAssetTree(bundle, asset, postProcessor, previous)
-      }, postProcessed);
+        dependencies
+      };
     }
   }
 }
@@ -24,7 +23,7 @@ function normalizeName(assetName, dep) {
   return dep;
 }
 
-async function buildAssetTree(bundle, asset, postProcessor, previous = []) {
+async function buildAssetTree(bundle, asset, processNode, previous = []) {
   let tree = [];
 
   for (let [dep, depProps] of asset.dependencies) {
@@ -32,7 +31,7 @@ async function buildAssetTree(bundle, asset, postProcessor, previous = []) {
     if (previous.indexOf(depName) === -1) {
       if (!depProps.includedInParent) {
         previous.push(depName);
-        let assetTree = await findAsset(bundle, depName, previous, postProcessor);
+        let assetTree = await findAsset(bundle, depName, previous, processNode);
         if (assetTree) {
           tree.push(assetTree);
         }
@@ -48,7 +47,7 @@ async function buildAssetTree(bundle, asset, postProcessor, previous = []) {
   return tree;
 }
 
-async function buildTree(bundle, postProcessor) {
+async function buildTree(bundle, processNode) {
   let entryAsset = bundle.entryAsset;
 
   if (!entryAsset) {
@@ -58,7 +57,7 @@ async function buildTree(bundle, postProcessor) {
   let bundleData = {
     name: entryAsset.name,
     type: entryAsset.type,
-    dependencies: await buildAssetTree(bundle, entryAsset, postProcessor)
+    dependencies: await buildAssetTree(bundle, entryAsset, processNode)
   }
 
   return bundleData;

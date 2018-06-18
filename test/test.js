@@ -4,9 +4,11 @@ const fs = require('fs-extra');
 
 async function test() {
   let jsonData = await importGrapher(path.join(__dirname, './project/index.js'), {
-    postProcessor: async asset => {
+    processNode: async (asset, deps) => {
       return {
-        contents: (await fs.readFile(asset.name)).toString()
+        name: asset.name,
+        contents: (await fs.readFile(asset.name)).toString(),
+        deps
       }; 
     }
   });
