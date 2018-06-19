@@ -15,7 +15,9 @@
   },
   "scripts": {
     "test-cli": "importgrapher ./src/index.js",
-    "test": "node ./test/test.js"
+    "test": "node ./test/test.js",
+    "check-lint": "xo --reporter",
+    "lint": "xo --fix"
   },
   "dependencies": {
     "chalk": "^2.4.1",
@@ -23,6 +25,14 @@
     "parcel-bundler": "^1.8.1"
   },
   "devDependencies": {
-    "fs-extra": "^6.0.1"
-  }
+    "fs-extra": "^6.0.1",
+    "xo": "^0.21.1"
+  },
+  "xo": {
+		"semicolon": true,
+    "space": 2,
+    "ignores": [
+      "test/**/**"
+    ]
+	}
 }

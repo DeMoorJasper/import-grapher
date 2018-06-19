@@ -1,15 +1,15 @@
-const importGrapher = require('../src/index');
 const path = require('path');
 const fs = require('fs-extra');
+const importGrapher = require('../src');
 
 async function test() {
-  let jsonData = await importGrapher(path.join(__dirname, './project/index.js'), {
+  const jsonData = await importGrapher(path.join(__dirname, './project/index.js'), {
     processNode: async (asset, deps) => {
       return {
         name: asset.name,
         contents: (await fs.readFile(asset.name)).toString(),
         deps
-      }; 
+      };
     }
   });
 

@@ -1,15 +1,15 @@
-const Bundler = require('parcel-bundler');
-const buildDataJson = require('./buildDataJson');
 const path = require('path');
+const Bundler = require('parcel-bundler');
+const buildDataJson = require('./build-data-json');
 
 async function generateGraph(entryPoint, options = {}) {
-  let cwd = process.cwd();
+  const cwd = process.cwd();
 
   // Hacky way of making parcel throw errors
-  process.env.NODE_ENV === 'test';
+  process.env.NODE_ENV = 'test';
 
   // Init bundler
-  let bundler = new Bundler(entryPoint, {
+  const bundler = new Bundler(entryPoint, {
     outDir: path.join(cwd, '.import-grapher', 'dist'),
     cacheDir: path.join(cwd, '.import-grapher', '.cache'),
     publicUrl: './',
@@ -21,14 +21,14 @@ async function generateGraph(entryPoint, options = {}) {
     minify: false,
     production: true
   });
-  
+
   // Run bundler
-  let bundle = await bundler.bundle();
+  const bundle = await bundler.bundle();
   if (!bundle) {
     throw new Error('An error occured while processing code...');
   }
 
-  return await buildDataJson(bundle, options.processNode);
+  return buildDataJson(bundle, options.processNode);
 }
 
 module.exports = generateGraph;
