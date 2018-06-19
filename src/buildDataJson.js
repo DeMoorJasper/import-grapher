@@ -37,10 +37,15 @@ async function buildAssetTree(bundle, asset, processNode, previous = []) {
         }
       }
     } else {
-      tree.push({
-        name: depName,
-        isCircularDependency: true
-      });
+      tree.push(
+        processNode
+          ? processNode(Object.assign(asset, { isCircularDependency: true }))
+          : {
+              name: asset.relativeName,
+              type: asset.type,
+              isCircularDependency: true
+            }
+      );
     }
   }
 
